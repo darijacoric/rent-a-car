@@ -1,0 +1,45 @@
+﻿
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Rent a Car", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                <li>@Html.ActionLink("About", "About", "Home")</li>
+
+                @*Everyone except user*@
+                @if (User.IsInRole(AppValues.AppRoles.ADMIN) || User.IsInRole(AppValues.AppRoles.SUPEREMPLOYEE) || User.IsInRole(AppValues.AppRoles.EMPLOYEE))
+                {
+                    <li>@Html.ActionLink("Vehicles", "Index", "Vehicles")</li>
+                    <li>@Html.ActionLink("Equipment", "Index", "Equipment")</li>
+                    <li>@Html.ActionLink("Location", "Index", "VehicleLocations")</li>
+                    <li>@Html.ActionLink("Orders", "Index", "Orders")</li>
+                }
+
+                @*Admin and SuperEmployee*@
+                @if (User.IsInRole(AppValues.AppRoles.ADMIN) || User.IsInRole(AppValues.AppRoles.SUPEREMPLOYEE))
+                {
+                    <li>@Html.ActionLink("Employees", "Index", "Employee")</li>
+                }
+
+                @*Admin*@
+                @if (User.IsInRole(AppValues.AppRoles.ADMIN))
+                {
+                    <li>@Html.ActionLink("Users", "Index", "Users")</li>
+                }
+            </ul>
+
+            @Html.Partial("_LoginPartial")
+        </div>
+    </div>
+</div>
+
+

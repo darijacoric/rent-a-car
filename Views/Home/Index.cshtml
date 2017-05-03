@@ -1,0 +1,104 @@
+﻿@model RentACar.ViewModels.DateAndLocationViewModel
+
+@{
+    ViewBag.Title = "Rent a Car";
+}
+
+<div class="row" style="margin-top:10px; width:7%">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Home</li>
+    </ol>    
+</div>
+
+@*This is only displayed if order was succesful*@
+@if (TempData["orderSuccess"] != null)
+{
+    string[] successMsgs = TempData["orderSuccess"] as string[];
+
+    <div class="row">
+        <div id="order-response-success" class="alert alert-success" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="alert-heading">@String.Format("{0}", successMsgs[0])</h4>
+            <p>@String.Format("{0}", successMsgs[1])</p>
+        </div>
+    </div>
+    TempData["orderSuccess"] = null;
+}
+
+<div class="row">
+    @using (Html.BeginForm("DateAndLocation", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "date-and-location-form" }))
+    {
+        @Html.AntiForgeryToken();
+        @Html.ValidationSummary("", new { @class = "text-danger" });
+
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3> Pickup</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ReceiveCity, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.ReceiveCity, (SelectList)ViewBag.ReceiveCitiesDDW, null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ReceiveCity, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ReceivePlace, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.ReceivePlace, (SelectList)ViewBag.ReceivePlaceDDW, null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ReceivePlace, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ReceiveTime, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(m => m.ReceiveTime, new { htmlAttributes = new { id = "receive-datetime", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ReceiveTime, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3> Drop Off</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DestinationCity, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.DestinationCity, (SelectList)ViewBag.DestinationCitiesDDW, null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DestinationCity, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DestinationPlace, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.DestinationPlace, (SelectList)ViewBag.DestinationPlaceDDW, null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DestinationPlace, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DestinationTime, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(m => m.DestinationTime, new { htmlAttributes = new { id = "destination-datetime", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DestinationTime, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" id ="next-btn" class="btn btn-success glyphicon glyphicon-forward next-btn" />
+    }
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

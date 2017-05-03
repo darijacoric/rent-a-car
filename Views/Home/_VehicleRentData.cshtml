@@ -1,0 +1,90 @@
+﻿@model RentACar.ViewModels.VehicleSelectionViewModel
+
+@{
+    string imageData = Model.ImagesBase64 ?? Url.Content("~/Content/Pics/car.png");
+
+    <div class="col-lg-3 col-md-3 col-sm-10 col-xs-12">
+        <img src="@imageData" class="vehicle-photo img-thumbnail" />
+    </div>
+
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <p style="margin-top:5px; font-size:medium">@String.Format(" {0}", Model.VehicleType)</p>
+                <h2>@String.Format("{0} {1}", Model.Brand, Model.BrandType)</h2>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <h3>@String.Format("Model Year - {0}", Model.ModelYear)</h3>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <h3>@String.Format("HP - {0} KS", Model.HorsePower)</h3>
+            </div>
+            @*<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <h3>@String.Format("Mileage - {0:n0} km", Model.Mileage)</h3>
+            </div>*@
+        </div>
+        <div class="row" style="text-align:left">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <p>Specification</p>
+                <ul>
+                    <li>@String.Format(" Fuel: {0}", Model.Fuel)</li>
+                    <li>@String.Format(" Doors: {0}", Model.DoorsCount)</li>
+                    <li>@String.Format(" Seats: {0}", Model.SeatCount)</li>
+                    <li>@String.Format(" Airbags: {0}", Model.Airbags)</li>
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <p>Additional Equipment</p>
+                <ul>
+                    @foreach (var equipment in Model.AdditionalEquipment)
+                    {
+                        <li> @equipment.Name</li>
+                    }
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <p>Liters of Gas per 100 km</p>
+                <ul>
+                    <li> @String.Format("{0:N1} l/100 km", Model.GasPerKm)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="row" style="margin-left:5px;margin-right:5px; text-align:right">
+            <h3 style="color:#f4511e"> Price Per Day</h3>
+            <h3 style="color:#f4511e"><strong>@String.Format("{0:N2} kn/day", Model.DayPrice)</strong></h3>
+        </div>
+
+        @if (ViewData["ShowRentButton"] != null && ViewData["ShowRentButton"] is bool)
+        {
+            if ((bool)ViewData["ShowRentButton"] == true)
+            {
+                <div class="row">
+
+                    @Html.ActionLink("Rent", "Payment", "Home", new { vehicleId = Model.ID }, new { @class = "btn btn-success next-btn", id = "rent-btn", type = "button" })
+                </div>
+            }
+        }
+
+        <div class="row" style="text-align:center">
+            @{
+                string totalPricePrefix = "";
+                string totalPrice = String.Format("{0:N2} kn", Model.TotalPriceForPeriod);
+
+                if (ViewData["PeriodSummary"] != null && ViewData["PeriodSummary"] is string)
+                {
+                    totalPricePrefix = (string)ViewData["PeriodSummary"];
+                }
+                else
+                {
+                    totalPricePrefix = "Total price is: ";
+                }
+                <p style="margin-top:5px; font-size:medium">@String.Format("{0}", totalPricePrefix) <h2> @totalPrice</h2></p>
+            }
+        </div>
+    </div>
+}

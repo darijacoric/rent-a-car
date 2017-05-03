@@ -1,0 +1,77 @@
+﻿@model RentACar.ViewModels.VehicleLocationViewModel
+
+@{
+    Layout = null;
+    string imageData = null;
+}
+
+<div class="modal-header" style="background:#AADAFA;">
+    <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title"> Details for @Model.VehicleLocation.DisplayLocation </h4>
+</div>
+
+<div class="modal-body" style="background-color:white">
+    <div class="row">
+        <div class="col-md-8">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.VehicleLocation.Place)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.VehicleLocation.Place)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.VehicleLocation.City)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.VehicleLocation.City)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.VehicleLocation.Description)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.VehicleLocation.Description)
+                </dd>
+            </dl>
+        </div>
+
+        <div class="col-md-4">
+            @if (Model.ImagesBase64.Count() > 0 && Model.ImagesBase64[0].ImageBase64Content != null)
+            {
+                imageData = Model.ImagesBase64[0].ImageBase64Content;
+            }
+            else
+            {
+                imageData = Url.Content("~/Content/Pics/location-pin.png");
+            }
+
+            <img src="@imageData" class ="img-thumbnail" id="location-photo" alt="Location image" /> <br />
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <div class="form-group">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="button"
+                            class="btn btn-default approve-btn modal-submit-btn" aria-label="Close" data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("~/Views/Shared/_ModalScripts.cshtml")

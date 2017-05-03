@@ -1,0 +1,65 @@
+﻿@model IEnumerable<RentACar.Models.VehicleLocation>
+
+@{
+    ViewBag.Title = "Locations";
+}
+
+<div class="row">
+    <h2>Locations</h2>
+    <p>
+        @Html.ActionLink("Create", "Create", routeValues: null, htmlAttributes: new { @class = "btn btn-info btn-lg modal-link create-button", data_loading_text = "<i class='fa fa-circle-o-notch fa-spin'></i> Loading", type = "button" })
+    </p>
+</div>
+
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Place)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Place)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ID }, htmlAttributes: new { @class = "modal-link" }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.ID }, htmlAttributes: new { @class = "modal-link" })
+
+                        @if (item.Status != RentACar.Models.EntityStatus.Archived)
+                        {                            
+                            @Html.ActionLink("Delete", "Delete", new { id = item.ID }, htmlAttributes: new { @class = "modal-link" })
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,139 @@
+﻿
+@model RentACar.Models.AppUser
+
+@{
+    Layout = null;
+    string imageData = null;
+}
+
+@* Form must be include modal header, body and footer so that when server returns partial view for modal on error, 
+   it will render whole html inside @Html.BeginForm brackets e.g. if only modal body and footer are in @Html.BeginForm, then on error, two modal headers would be displayed. *@
+
+@using (Html.BeginForm("Delete", "Employee", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    <div class="modal-header" style="background:#AADAFA;">
+        <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title"> @String.Format("Do you really want to delete {0} {1}?", Model.FirstName, Model.LastName)</h4>
+    </div>
+    
+    <div class="modal-body" style="background-color:white">
+        <div class="row">
+
+            @Html.AntiForgeryToken()
+            @*<hr />*@
+
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+            <div class="col-md-8">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.FirstName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.LastName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.LastName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.BirthDate)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.BirthDate)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PhoneNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.PhoneNumber)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.StreetName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.StreetName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.City)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.City)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PostalCode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.PostalCode)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+                    
+                    <dt>
+                        @Html.DisplayName("Employee Role")
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayName(Model.RoleNames != null && Model.RoleNames.Length > 0 && !String.IsNullOrEmpty(Model.RoleNames[0]) ? Model.RoleNames[0] : "")
+                    </dd>
+                </dl>
+            </div>
+
+            <div class="col-md-4">
+                @if (Model.ImagesBase64.Count() > 0 && Model.ImagesBase64[0].ImageBase64Content != null)
+                {
+                    imageData = Model.ImagesBase64[0].ImageBase64Content;
+                }
+                else
+                {
+                    imageData = Url.Content("~/Content/Pics/people.jpg");
+                }
+
+                <img src="@imageData" id="profile-photo" alt="Profile image" /> <br />
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="button" class="btn btn-danger modal-submit-btn" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn btn-success approve-btn modal-submit-btn">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@Html.Partial("~/Views/Shared/_ModalScripts.cshtml")

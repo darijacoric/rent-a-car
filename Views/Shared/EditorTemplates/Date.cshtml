@@ -1,0 +1,24 @@
+﻿@model Nullable<DateTime>
+
+@*https://docs.microsoft.com/en-us/aspnet/mvc/overview/older-versions/using-the-html5-and-jquery-ui-datepicker-popup-calendar-with-aspnet-mvc/using-the-html5-and-jquery-ui-datepicker-popup-calendar-with-aspnet-mvc-part-4*@
+@*https://eonasdan.github.io/bootstrap-datetimepicker/*@
+
+@Html.TextBox("", String.Format("{0:d/M/yyyy}", Model.HasValue ? Model.Value.ToShortDateString() : ""), htmlAttributes: new { @class = "datefield form-control", type = "text", placeholder = "D/M/YYYY" })
+
+@*<div class='input-group date' id='datetimepicker1'>    
+    <input type='text' class="form-control" />
+    <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+</div>*@
+
+@*<input type='text' class="form-control" id='datetimepicker1' />*@
+
+@*<div class="form-group">
+    <div class='input-group date' id='datetimepicker1'>
+        <input type='text' class="form-control" />
+        <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+    </div>
+</div>*@

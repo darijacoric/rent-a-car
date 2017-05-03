@@ -1,0 +1,64 @@
+﻿
+<div class="modal-scripts">
+
+    @Scripts.Render("~/bundles/datepicker")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @Scripts.Render("~/bundles/fileprocess")
+
+    @* Add this script like this for views that have date only fields*@
+    <script src="~/Scripts/Custom/Global/custom-validation.js"></script>
+
+    <script type="text/javascript">
+
+        $('input[type=checkbox]').click(function (e) {
+            $spanPrice = $(this).next('label').find('span.additional-price');
+
+            var price = parseFloat($spanPrice.text());
+            var totalPrice = parseFloat($('label#total').text());
+
+            var result = 0;
+
+            if ($(this).is(':checked')) {
+                result = price + totalPrice;
+            }
+            else {
+                result = totalPrice - price;
+            }
+
+            $('label#total').text(result.toFixed(2) + ' kn');
+        })
+
+        $('#Vehicle_DayPrice').on('keyup', function (e) {
+
+            var labelTotalText = "";
+            var total = parseFloat($(this).val());
+
+            if (total == undefined || total == null || isNaN(total)) {
+                labelTotalText = 'Invalid Price';
+            }
+            else {
+                var i = 0;
+                var chxResult = 0;
+                $('.additional-equipment > .additional-equipment-body').children().each(function () {
+
+                    var $checkbox = $(this).find('input[type=checkbox]');
+
+                    if ($checkbox.is(':checked')) {
+                        chxResult += parseFloat($checkbox.next('label').find('span.additional-price').text());
+                    }
+                })
+
+
+                if (isNaN(chxResult)) {
+                    labelTotalText = 'Invalid Price';
+                }
+                else {
+                    labelTotalText = (chxResult + total).toFixed(2) + ' kn';
+                }
+            }
+
+            $('label#total').text(labelTotalText);
+        })
+    </script>
+</div>

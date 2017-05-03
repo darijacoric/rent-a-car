@@ -1,0 +1,149 @@
+﻿@model IEnumerable<RentACar.Models.Vehicle>
+
+@{
+    ViewBag.Title = "Vehicles";
+
+    RentACar.ViewModels.EntityStatusView[] statusList = ViewBag.statusList as RentACar.ViewModels.EntityStatusView[];
+
+    string vehicleRowColor = null;
+
+}
+
+<div class="row">
+    <h2>Vehicles</h2>
+
+    <p>
+        @Html.ActionLink("Create", "Create", routeValues: null, htmlAttributes: new { @class = "btn btn-info btn-lg modal-link create-button", data_loading_text = "<i class='fa fa-circle-o-notch fa-spin'></i> Loading", type = "button" })
+    </p>
+    <div class="form-group">
+        @using (Html.BeginForm("Index", "Vehicles", FormMethod.Get))
+            {
+                foreach (var status in statusList)
+                {
+                    <label class="checkbox-inline"><input type="checkbox" name="vehicleStatus" value="@status.StatusValue" @Html.Raw(status.Checked == true ? "checked=\"checked\"" : "") /> @String.Format("{0}", status.StatusName)</label>
+                }
+            <input type="submit" class="btn btn-default" value="Filter" />
+        }
+    </div>
+
+</div>
+
+<div class="row">
+    <table class="table table-custom">
+        <thead>
+            <tr>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.VehicleType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Brand)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BrandType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Registration)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RegistrationExpire)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Mileage)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DayPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AcquiredDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                switch (item.Status)
+                {
+                    case RentACar.Models.EntityStatus.Active:
+                        vehicleRowColor = AppValues.AppColors.Green;
+                        break;
+                    case RentACar.Models.EntityStatus.Archived:
+                        vehicleRowColor = AppValues.AppColors.Gray;
+                        break;
+                    default:
+                        vehicleRowColor = "";
+                        break;
+                }
+
+                @*If registration expired*@
+            if (item.Status != RentACar.Models.EntityStatus.Archived && item.RegistrationExpire.Value.Date <= DateTime.Now.Date)
+            {
+                vehicleRowColor = AppValues.AppColors.Red;
+            }
+            @*If registration expires in 30 days *@
+            else if (item.Status != RentACar.Models.EntityStatus.Archived && 
+                 item.RegistrationExpire.Value.Date < DateTime.Now.Date.AddDays(+30).Date )
+            {
+                vehicleRowColor = AppValues.AppColors.Yellow;
+            }
+
+            <tr style="background-color:@String.Format("{0}", vehicleRowColor)">
+                <td>
+                    @Html.DisplayFor(modelItem => item.VehicleType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Brand)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BrandType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Registration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegistrationExpire)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mileage)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DayPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AcquiredDate)
+                </td>
+                <td>
+
+                    @if (item.Status != RentACar.Models.EntityStatus.Archived)
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ID }, htmlAttributes: new { @class = "modal-link" }) @:|
+                    }
+
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }, htmlAttributes: new { @class = "modal-link" })
+
+                    @if (item.Status != RentACar.Models.EntityStatus.Active && item.Status != RentACar.Models.EntityStatus.Archived)
+                    {
+                        @:| @Html.ActionLink("Delete", "Delete", new { id = item.ID }, htmlAttributes: new { @class = "modal-link" })
+                    }
+                </td>
+
+            </tr>
+            }
+        </tbody>
+
+        <tfoot>
+        </tfoot>
+    </table>
+</div>

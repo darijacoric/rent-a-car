@@ -1,0 +1,150 @@
+﻿
+@model RentACar.Models.EditViewModel
+
+@{
+    Layout = null;
+    string imageData = null;
+    string imageLabel = null;    
+}
+
+@* Form must be include modal header, body and footer so that when server returns partial view for modal on error,
+    it will render whole html inside @Html.BeginForm brackets e.g. if only modal body and footer are in @Html.BeginForm, then on error, two modal headers would be displayed. *@
+
+@using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" }))
+{
+    <div class="modal-header" style="background:#AADAFA;">
+        <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title"> Edit @String.Format("{0} {1}", Model.FirstName, Model.LastName)</h4>
+    </div>
+
+    <div class="modal-body" style="background-color:white">
+        <div class="row">
+
+            @Html.AntiForgeryToken()
+            @*<hr />*@
+
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+            <div class="col-md-8">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.FirstName, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.BirthDate, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(m => m.BirthDate)
+                        @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.StreetName, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.StreetName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.StreetName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.City, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PostalCode, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Employee Role", new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.Role, (SelectList)ViewBag.Roles, null, htmlAttributes: new { @class = "form-control" })
+
+                        @*@Html.DropDownList("Roles", null, null, htmlAttributes: new { @class = "form-control" })*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                @if (Model.ImagesBase64.Count() > 0 && Model.ImagesBase64[0].ImageBase64Content != null)
+                {
+                    imageData = Model.ImagesBase64[0].ImageBase64Content;
+                    imageLabel = "";
+                }
+                else
+                {
+                    imageData = Url.Content("~/Content/Pics/people.jpg");
+                    imageLabel = "No picture selected.";
+                }
+
+                <img src="@imageData" id="profile-photo" alt="Profile image" /> <br />
+                <label class="btn btn-default" for="profile-picture-upload">
+                    Browse @Html.TextBoxFor(m => m.Files, new
+                      {
+                          type = "file",
+                          accept = "image/*",
+                          id = "profile-picture-upload",
+                          style = "display:none"
+                      })
+                </label>
+                <span class="label label-info" id="upload-file-info" style="font-size:small; margin-left:5px;">@imageLabel</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="button" class="btn btn-danger modal-submit-btn" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn btn-success approve-btn modal-submit-btn" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Loading">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@Html.Partial("~/Views/Shared/_ModalScripts.cshtml")

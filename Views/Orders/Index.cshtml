@@ -1,0 +1,105 @@
+﻿@model IEnumerable<RentACar.ViewModels.OrderViewModel>
+@{
+    ViewBag.Title = "Orders";
+    string orderRowColor;
+    RentACar.ViewModels.EntityStatusView[] statusList = ViewBag.statusList as RentACar.ViewModels.EntityStatusView[];
+}
+
+<div class="row">
+    <h2>Orders</h2>
+
+    <div class="form-group">
+        @using (Html.BeginForm("Index", "Orders", FormMethod.Get))
+            {
+                foreach (var status in statusList)
+                {
+                    <label class="checkbox-inline"><input type="checkbox" name="orderStatus" value="@status.StatusValue" @Html.Raw(status.Checked == true ? "checked=\"checked\"" : "") /> @String.Format("{0}", status.StatusName)</label>
+                }
+                <input type="submit" class="btn btn-default" value="Filter" />
+        }
+    </div>
+
+</div>
+
+<div class="row">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th class="hasInput"></th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(m => m.Order.OrderNumber)</th>
+                <th>@Html.DisplayNameFor(m => m.Order.Vehicle.VehicleType)</th>
+                <th>@Html.DisplayNameFor(m => m.Order.Vehicle.Brand)</th>
+                <th>@Html.DisplayNameFor(m => m.Order.Vehicle.BrandType)</th>
+                <th>@Html.DisplayNameFor(m => m.User.FirstName)</th>
+                <th>@Html.DisplayNameFor(m => m.User.LastName)</th>
+                <th>@Html.DisplayNameFor(m => m.PaymentType.Name)</th>
+                <th>@Html.DisplayNameFor(m => m.Order.TotalPrice)</th>
+                <th>Pickup Location</th>
+                <th>@Html.DisplayNameFor(m => m.Order.RecvTime)</th>
+                <th>Drop Off Location</th>
+                <th>@Html.DisplayNameFor(m => m.Order.DestTime)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                switch (item.Order.Status)
+                {
+                    case RentACar.Models.EntityStatus.Active:
+                        //orderRowColor = "#BDFCC9";
+                        orderRowColor = "";
+                        break;
+                    case RentACar.Models.EntityStatus.Archived:
+                        orderRowColor = AppValues.AppColors.Gray;
+                        break;
+                    default:
+                        orderRowColor = "";
+                        break;
+                }
+
+                // todo: Fix sorting for non string columns
+                <tr style="background-color: @String.Format("{0}", orderRowColor)">
+                    <td>@Html.DisplayFor(m => item.Order.OrderNumber)</td>
+                    <td ><a class="modal-link" href="/Vehicles/Details/@item.Order.VehicleId">@Html.DisplayFor(m => item.Order.Vehicle.VehicleType)</a></td>
+                    <td><a class="modal-link" href="/Vehicles/Details/@item.Order.VehicleId">@Html.DisplayFor(m => item.Order.Vehicle.Brand)</a></td>
+                    <td><a class="modal-link" href="/Vehicles/Details/@item.Order.VehicleId">@Html.DisplayFor(m => item.Order.Vehicle.BrandType)</a></td>
+                    <td>@Html.DisplayFor(m => item.User.FirstName)</td>
+                    <td>@Html.DisplayFor(m => item.User.LastName)</td>
+                    <td>@Html.DisplayFor(m => item.PaymentType.Name)</td>
+                    <td>@Html.DisplayFor(m => item.Order.TotalPrice)</td>
+                    <td><a class="modal-link" href="/VehicleLocations/Details/@item.Order.RecvLocationId">@Html.DisplayFor(m => item.Order.ReceiveLocation.DisplayLocation)</a></td>
+                    <td>@Html.DisplayFor(m => item.Order.RecvTime)</td>                    
+                    <td><a class="modal-link" href="/VehicleLocations/Details/@item.Order.DestLocationId">@Html.DisplayFor(m => item.Order.DestinationLocation.DisplayLocation)</a></td>
+                    <td>@Html.DisplayFor(m => item.Order.DestTime)</td>
+                    <td>
+                        @Html.ActionLink("Details", "Details", new { id = item.Order.ID }, htmlAttributes: new { @class = "modal-link" })
+                        @if (item.Order.Status != RentACar.Models.EntityStatus.Archived)
+                        {
+                            @: | @Html.ActionLink("Archive", "Delete", new { id = item.Order.ID }, htmlAttributes: new { @class = "modal-link" })
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+    </table>
+</div>
+

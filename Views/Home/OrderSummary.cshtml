@@ -1,0 +1,68 @@
+﻿@model RentACar.ViewModels.OrderSummaryViewModel
+
+@{
+    ViewBag.Title = "Order Summary";
+
+    ViewDataDictionary partialViewData = new ViewDataDictionary();
+    partialViewData["ShowRentButton"] = false;
+    partialViewData["PeriodSummary"] = String.Format("For period {0:dd.MM.yyyy} - {1:dd.MM.yyyy}: ", (DateTime?)ViewBag.ReceiveDate, (DateTime?)ViewBag.DestinationDate);
+
+}
+
+<div class="row" style="margin-top:10px; width:40%">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Home", "Index", routeValues: new { })</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Vehicle Selection", "VehicleSelection", routeValues: new { })</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Payment", "Payment", routeValues: new { vehicleId = ViewBag.vehicleId })</li>
+        <li class="breadcrumb-item active">Order Summary</li>
+    </ol>
+</div>
+
+<div class="row">
+    <div id="order-response-error" role="alert">
+    </div>
+</div>
+
+<div class="row panel panel-info" style="margin-top:10px; text-align:center">
+    <div class="panel-heading" style="text-align:left">
+        <h3><strong>@String.Format(" Order Number: {0}", Model.Order.OrderNumber)</strong></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">            
+            @Html.Partial("~/Views/Home/_VehicleRentData.cshtml", Model.VehicleModel, partialViewData)
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-lg-6 col-md-6 panel panel-info" style="text-align:left; margin-top:8px;">
+                <div class="">
+                    <h4 class=""> <strong> Pickup Location: </strong> @String.Format("{0}", Model.Order.ReceiveLocation.DisplayLocation)</h4>
+                    <h4 class=""> <strong> Pickup Time: </strong>@String.Format("{0}", Model.Order.RecvTime.ToString())</h4>
+                </div>
+                <div class="">
+                    @if (!String.IsNullOrEmpty(Model.ReceiveLocationImageBase64))
+                    {
+                        <img src="@Model.ReceiveLocationImageBase64" class="img-thumbnail" alt="Pickup Location Image" style="width:100%; height:300px" />
+                    }
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 panel panel-info" style="text-align:left; margin-top:8px;">
+                <div class="">
+                    <h4 class=""> <strong> Drop Off Location: </strong> @String.Format("{0}", Model.Order.DestinationLocation.DisplayLocation)</h4>
+                    <h4 class=""> <strong> Drop Off Time: </strong> @String.Format("{0}", Model.Order.DestTime.ToString())</h4>
+                </div>
+                <div class="">
+                    @if (!String.IsNullOrEmpty(Model.DestinationLocationImageBase64))
+                    {
+                        <img src="@Model.DestinationLocationImageBase64" class="img-thumbnail" alt="Drop Off Location Image" style="width:100%; height:300px" /> <br />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <button type="button" id="confirm-order-btn" class="btn btn-success next-btn glyphicon glyphicon-ok" title="Confirm Order" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Loading" />
+
+</div>
+
+
+

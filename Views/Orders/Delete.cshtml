@@ -1,0 +1,248 @@
+﻿@model RentACar.ViewModels.OrderViewModel
+
+@{
+    Layout = null;
+}
+
+@* Form must be include modal header, body and footer so that when server returns partial view for modal on error,
+    it will render whole html inside @Html.BeginForm brackets e.g. if only modal body and footer are in @Html.BeginForm, then on error, two modal headers would be displayed. *@
+
+@using (Html.BeginForm("Delete", "Orders", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    <div class="modal-header" style="background:#AADAFA;">
+        <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title"> @String.Format("Do you really want to archive Order Number: {0}?", Model.Order.OrderNumber)</h4>
+    </div>
+
+    <div class="modal-body" style="background-color:white">
+        @if (Model.Order.DestTime > DateTime.Now)
+        {
+            <div class="alert alert-warning">
+                <h4 class="alert-heading"> <strong> Warning!</strong></h4>
+                <p>@Html.Raw("Drop Off time <strong>" + Model.Order.DestTime.ToString() + "</strong> is higher than current time <strong>" + DateTime.Now.ToString() + "</strong>")</p>                
+            </div>
+        }
+        <div class="row">
+
+            @Html.AntiForgeryToken()
+            @*<hr />*@
+
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+            <div class="col-md-6 panel panel-default">
+                <div class="panel-heading">
+                    <h4><strong> User</strong></h4>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(m => m.User.FullName)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.User.FullName)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(m => m.User.Email)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.User.Email)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.User.BirthDate)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.User.BirthDate)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.User.PhoneNumber)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.User.PhoneNumber)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.User.Address)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.User.Address)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.User.PostalCode)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.User.PostalCode)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="col-md-6 panel panel-default">
+                <div class="panel-heading">
+                    <h4> Vehicle</h4>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(m => m.Order.Vehicle.VehicleType)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.Order.Vehicle.VehicleType)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.Order.Vehicle.Brand)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.Order.Vehicle.Brand)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.Order.Vehicle.BrandType)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.Order.Vehicle.BrandType)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.Order.Vehicle.Registration)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.Order.Vehicle.Registration)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.Order.Vehicle.RegistrationExpire)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.Order.Vehicle.RegistrationExpire)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.Order.Vehicle.Mileage)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.Order.Vehicle.Mileage)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.Order.Vehicle.DayPrice)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.Order.Vehicle.DayPrice)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="col-md-6 panel panel-default">
+                <div class="panel-heading">
+                    <h4> Payment</h4>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(m => m.Order.TotalPrice)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.Order.TotalPrice)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(m => m.PaymentType.Name)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.PaymentType.Name)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.CreditCard.OwnerFirstName)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.CreditCard.OwnerFirstName)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.CreditCard.OwnerLastName)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.CreditCard.OwnerLastName)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.CreditCard.CardNumber)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.CreditCard.CardNumber)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.CreditCard.ExpirationDate)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.CreditCard.ExpirationDate)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="col-md-6 panel panel-default">
+                <div class="panel-heading">
+                    <h4>Location</h4>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(m => m.Order.RecvLocationId)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.Order.ReceiveLocation.DisplayLocation)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.Order.RecvTime)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.Order.RecvTime)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.Order.DestLocationId)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.Order.DestinationLocation.DisplayLocation)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(m => m.Order.DestTime)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(m => m.Order.DestTime)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="button" class="btn btn-danger modal-submit-btn" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn btn-success approve-btn modal-submit-btn">
+                        Archive
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@Html.Partial("~/Views/Shared/_ModalScripts.cshtml")

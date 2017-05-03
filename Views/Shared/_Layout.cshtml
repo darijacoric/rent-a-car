@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="COo5NexCHcilTp3fIwAPgZL3Olwh2mYJU9RXusy_u7A" />
+    <title>@ViewBag.Title </title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body style="background-color:#FFFAF0">
+
+    @*@Html.Partial("_FacebookSDK.cshtml")*@
+
+    @Html.Partial("_Navigation")
+
+    <div class="container body-content">
+        <div id="app-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                </div>
+            </div>
+        </div>
+
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now - Rent a Car</p>
+        </footer>
+    </div>
+
+    @Html.Partial("~/Views/Shared/_Scripts.cshtml")
+
+    @RenderSection("scripts", required: false)
+  
+</body>
+</html>

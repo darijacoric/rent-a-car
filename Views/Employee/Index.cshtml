@@ -1,0 +1,76 @@
+﻿@model IEnumerable<RentACar.Models.AppUser>
+
+@{
+    ViewBag.Title = "Employees";
+}
+
+<div class="row">
+    <h2>Employees</h2>
+
+    <p>
+        @Html.ActionLink("Create", "Create", routeValues: null, htmlAttributes: new { @class = "btn btn-info btn-lg modal-link create-button", data_loading_text = "<i class='fa fa-circle-o-notch fa-spin'></i> Loading", type = "button" })
+    </p>
+</div>
+
+<div class="row">
+    @{
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="hasInput"></th>
+                    <th class="hasInput"></th>
+                    <th class="hasInput"></th>
+                    <th class="hasInput"></th>
+                    <th class="hasInput"></th>
+                    <th class="hasInput"></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(m => m.FirstName)</th>
+
+                    <th>@Html.DisplayNameFor(m => m.LastName)</th>
+
+                    <th>@Html.DisplayNameFor(m => m.BirthDate)</th>
+
+                    <th>@Html.DisplayNameFor(m => m.PhoneNumber)</th>
+
+                    <th>@Html.DisplayNameFor(m => m.Email)</th>
+
+                    <th>Role</th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    bool userHasRole = (user.RoleNames == null || user.RoleNames.Length == 0) ? false : true;
+
+                    <tr>
+                        <td> @Html.DisplayFor(m => user.FirstName)</td>
+
+                        <td> @Html.DisplayFor(m => user.LastName)</td>
+
+                        <td> @Html.DisplayFor(m => user.BirthDate)</td>
+
+                        <td> @Html.DisplayFor(m => user.PhoneNumber)</td>
+
+                        <td> @Html.DisplayFor(m => user.Email)</td>
+
+                        <td> @String.Format("{0}", userHasRole == true ? user.RoleNames[0] : "")</td>
+
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = user.Id }, htmlAttributes: new { @class = "modal-link" }) |
+                            @Html.ActionLink("Details", "Details", new { id = user.Id }, htmlAttributes: new { @class = "modal-link" }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = user.Id }, htmlAttributes: new { @class = "modal-link" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+
+            </tfoot>
+        </table>
+    }
+
+</div>

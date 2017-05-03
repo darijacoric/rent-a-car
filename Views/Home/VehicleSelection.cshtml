@@ -1,0 +1,112 @@
+﻿@model IEnumerable<RentACar.ViewModels.VehicleSelectionViewModel>
+@{
+    ViewBag.Title = "Vehicle Selection";
+
+    AjaxOptions ajaxOptions = new AjaxOptions()
+    {
+        HttpMethod = "Post"
+    };
+}
+<div class="row" style="margin-top:10px; width:20%">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Home", "Index", routeValues: new { })</li>
+        <li class="breadcrumb-item active">Vehicle Selection</li>
+    </ol>
+</div>
+
+<div class="row">
+    <h2> Select Vehicle</h2>
+</div>
+
+@{
+    @Html.AntiForgeryToken();
+
+    ViewDataDictionary partialViewData = new ViewDataDictionary();
+    partialViewData["ShowRentButton"] = true;
+    partialViewData["PeriodSummary"] = String.Format("For period {0:dd.MM.yyyy} - {1:dd.MM.yyyy}: ", (DateTime)ViewBag.ReceiveDate, (DateTime)ViewBag.DestinationDate);
+
+    using (Html.BeginForm("VehicleSelection", "Home", FormMethod.Get))
+    {
+        <div class="row panel panel-default " style="background-color:#eee; padding-left:10px;">
+
+
+            <div class="row">
+                <div class="col-lg-2 col-md-2">
+                    <h4>Vehicle Type</h4>
+                    @Html.DropDownList("vehicleType", (SelectList)ViewBag.VehicleTypesDropDown, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <h4>Brand</h4>
+                    @Html.DropDownList("brand", (SelectList)ViewBag.BrandsDropDown, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <h4>Consumption Range</h4>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="col-lg-3 col-md-3">
+                            <label class="control-label">Min: </label>
+                        </div>
+                        <div class="col-lg-9 col-md-9">
+                            @Html.DropDownList("consumptionFrom", (SelectList)ViewBag.MinConsumptionDropDown, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="col-lg-3 col-md-3">
+                            <label class="control-label">Max: </label>
+                        </div>
+                        <div class="col-lg-9 col-md-9">
+                            @Html.DropDownList("consumptionTo", (SelectList)ViewBag.MaxConsumptionDropDown, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <h4>Price Range</h4>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="col-lg-3 col-md-3">
+                            <label class="control-label">Min: </label>
+                        </div>
+                        <div class="col-lg-9 col-md-9">
+                            @Html.DropDownList("priceFrom", (SelectList)ViewBag.MinPricesDropDown, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="col-lg-3 col-md-3">
+                            <label class="control-label">Max: </label>
+                        </div>
+                        <div class="col-lg-9 col-md-9">
+                            @Html.DropDownList("priceTo", (SelectList)ViewBag.MaxPricesDropDown, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row" style="margin-bottom:10px;">
+            <button type="submit" class="btn btn-default btn-lg btn-default" style="float:right"> Filter</button>
+        </div>
+    }
+
+    <div class="row">
+        @{
+            if (Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <div class="row vehicle-data-group" style="background-color:white">
+                        @Html.Partial("~/Views/Home/_VehicleRentData.cshtml", item, partialViewData)
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    <h4> There are no vehicles that match filter criteria!</h4>
+                </div>
+            }
+
+        }
+
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
